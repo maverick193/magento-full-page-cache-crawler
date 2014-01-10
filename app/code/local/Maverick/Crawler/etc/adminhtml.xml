@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Maverick_Crawler Extension
+ *
+ * NOTICE OF LICENSE
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ * @version     0.1.0
+ * @category    Maverick
+ * @package     Maverick_Crawler
+ * @author      Mohammed NAHHAS <m.nahhas@live.fr>
+ * @copyright   Copyright (c) 2014 Mohammed NAHHAS
+ * @licence     OSL - Open Software Licence 3.0
+ *
+ */
+
+/**
+ * Adminhtml XML
+ */
+-->
+<config>
+    <menu>
+        <maverick>
+            <title>Maverick</title>
+            <sort_order>500</sort_order>
+            <children>
+                <crawler translate="title" module="maverick_crawler">
+                    <title>Cache Crawler</title>
+                    <sort_order>30</sort_order>
+                    <action>adminhtml/crawler/</action>
+                </crawler>
+            </children>
+        </maverick>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <maverick translate="title" module="maverick_crawler">
+                        <title>Maverick</title>
+                        <sort_order>500</sort_order>
+                        <children>
+                            <crawler translate="title" module="maverick_crawler">
+                                <title>Cache Crawler</title>
+                                <sort_order>30</sort_order>
+                            </crawler>
+                        </children>
+                    </maverick>
+                    <!--<system>
+                        <children>
+                            <config>
+                                <children>
+                                    <crawler translate="title" module="maverick_crawler">
+                                        <title>Cache Crawler Section</title>
+                                    </crawler>
+                                </children>
+                            </config>
+                        </children>
+                    </system>-->
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

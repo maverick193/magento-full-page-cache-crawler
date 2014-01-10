@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Maverick_Crawler Extension
+ *
+ * NOTICE OF LICENSE
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ * @version     0.1.0
+ * @category    Maverick
+ * @package     Maverick_Crawler
+ * @author      Mohammed NAHHAS <m.nahhas@live.fr>
+ * @copyright   Copyright (c) 2014 Mohammed NAHHAS
+ * @licence     OSL - Open Software Licence 3.0
+ *
+ */
+
+/**
+ * Configuration XML
+ */
+-->
+<config>
+    <modules>
+        <Maverick_Crawler>
+            <version>0.1.0</version>
+        </Maverick_Crawler>
+    </modules>
+    <global>
+        <models>
+            <maverick_crawler>
+                <class>Maverick_Crawler_Model</class>
+                <resourceModel>maverick_crawler_resource</resourceModel>
+            </maverick_crawler>
+            <maverick_crawler_resource>
+                <class>Maverick_Crawler_Model_Resource</class>
+                <entities>
+                    <crawler>
+                        <table>maverick_crawler_entity</table>
+                    </crawler>
+                </entities>
+            </maverick_crawler_resource>
+        </models>
+        <blocks>
+            <maverick_crawler>
+                <class>Maverick_Crawler_Block</class>
+            </maverick_crawler>
+        </blocks>
+        <helpers>
+            <maverick_crawler>
+                <class>Maverick_Crawler_Helper</class>
+            </maverick_crawler>
+        </helpers>
+        <resources>
+            <maverick_crawler_setup>
+                <setup>
+                    <module>Maverick_Crawler</module>
+                </setup>
+            </maverick_crawler_setup>
+        </resources>
+    </global>
+
+    <adminhtml>
+        <translate>
+            <modules>
+                <Maverick_Crawler>
+                    <files>
+                        <default>Maverick_Crawler.csv</default>
+                    </files>
+                </Maverick_Crawler>
+            </modules>
+        </translate>
+    </adminhtml>
+
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <maverick_crawler before="Mage_Adminhtml">Maverick_Crawler_Adminhtml</maverick_crawler>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+
+    <!-- Mapping Crawler Types -->
+    <crawler>
+        <entities>
+            <category>
+                <label>Catalog Category</label>
+                <class>entity_type_category</class>
+            </category>
+        </entities>
+    </crawler>
+</config>
