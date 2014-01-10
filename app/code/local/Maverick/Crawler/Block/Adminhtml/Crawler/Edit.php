@@ -61,6 +61,7 @@ class Maverick_Crawler_Block_Adminhtml_Crawler_Edit extends Mage_Adminhtml_Block
         } else {
             $this->_removeButton('save');
             $this->_removeButton('delete');
+            $this->setFormActionUrl($this->getUrl('*/*/validate'));
         }
     }
 

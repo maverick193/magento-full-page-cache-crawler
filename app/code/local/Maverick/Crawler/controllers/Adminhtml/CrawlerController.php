@@ -120,4 +120,17 @@ class Maverick_Crawler_Adminhtml_CrawlerController extends Mage_Adminhtml_Contro
 
         $this->renderLayout();
     }
+
+    public function validateAction()
+    {
+        $data = $this->getRequest()->getPost();
+        if (empty($data) || !isset($data['type'])) {
+            $this->_getSession()->addError(Mage::helper('maverick_crawler')->__('Cannot retrieve Crawler type.'));
+            $this->_redirect('*/*/new');
+            return;
+        }
+
+        $this->_redirect('*/*/edit', array('type' => $data['type']));
+        return;
+    }
 }

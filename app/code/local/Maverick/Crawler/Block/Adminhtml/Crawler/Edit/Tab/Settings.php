@@ -34,7 +34,7 @@ class Maverick_Crawler_Block_Adminhtml_Crawler_Edit_Tab_Settings extends Mage_Ad
             $this->getLayout()->createBlock('adminhtml/widget_button')
                 ->setData(array(
                     'label'     => Mage::helper('maverick_crawler')->__('Continue'),
-                    'onclick'   => "setSettings('".$this->getContinueUrl()."','name','type')",
+                    'onclick'   => "editForm.submit();",
                     'class'     => 'save'
                 ))
         );
@@ -46,16 +46,9 @@ class Maverick_Crawler_Block_Adminhtml_Crawler_Edit_Tab_Settings extends Mage_Ad
         $form = new Varien_Data_Form();
         $fieldset = $form->addFieldset('settings', array('legend'=>Mage::helper('maverick_crawler')->__('Create Crawler Settings')));
 
-        $fieldset->addField('name', 'text', array(
-            'name'      => 'name',
-            'label'     => Mage::helper('maverick_crawler')->__('Sort Order'),
-            'title'     => Mage::helper('maverick_crawler')->__('Sort Order'),
-            'required'  => false
-        ));
-
         $fieldset->addField('type', 'select', array(
-            'label'     => Mage::helper('maverick_crawler')->__('Product Type'),
-            'title'     => Mage::helper('maverick_crawler')->__('Product Type'),
+            'label'     => Mage::helper('maverick_crawler')->__('Crawler Type'),
+            'title'     => Mage::helper('maverick_crawler')->__('Crawler Type'),
             'name'      => 'type',
             'value'     => '',
             'required'  => true,
@@ -67,14 +60,5 @@ class Maverick_Crawler_Block_Adminhtml_Crawler_Edit_Tab_Settings extends Mage_Ad
         ));
 
         $this->setForm($form);
-    }
-
-    public function getContinueUrl()
-    {
-        return $this->getUrl('*/*/new', array(
-            '_current'  => true,
-            'set'       => '{{name}}',
-            'type'      => '{{type}}'
-        ));
     }
 }
