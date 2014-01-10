@@ -1,0 +1,4 @@
+# Maverick_Crawler modman file
+
+app/code/local/Maverick/Crawler app/code/local/Maverick/Crawler
+app/etc/modules/Maverick_Crawler.xml app/etc/modules/Maverick_Crawler.xml
