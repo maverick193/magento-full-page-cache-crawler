@@ -28,6 +28,12 @@
 
 class Maverick_Crawler_Model_Resource_Crawler extends Mage_Core_Model_Resource_Db_Abstract
 {
+    /**
+     * Crawler to category linkage table
+     *
+     * @var string
+     */
+    protected $_crawlerCategoryTable;
 
     /**
      * Resource initialization
@@ -35,6 +41,7 @@ class Maverick_Crawler_Model_Resource_Crawler extends Mage_Core_Model_Resource_D
     protected function _construct()
     {
         $this->_init('maverick_crawler/crawler', 'entity_id');
+        $this->_crawlerCategoryTable = $this->getTable('maverick_crawler/type_category');
     }
 
     /**
@@ -50,6 +57,75 @@ class Maverick_Crawler_Model_Resource_Crawler extends Mage_Core_Model_Resource_D
             $crawler->setCreatedAt($date);
         }
         $crawler->setUpdatedAt($date);
+
+        return $this;
+    }
+
+    /**
+     * Retrieve crawler category identifiers
+     *
+     * @param Maverick_Crawler_Model_Crawler $crawler
+     * @return array
+     */
+    public function getCategoryIds(Maverick_Crawler_Model_Crawler $crawler)
+    {
+        $adapter = $this->_getReadAdapter();
+
+        $select = $adapter->select()
+            ->from($this->_crawlerCategoryTable, 'category_id')
+            ->where('crawler_id = ?', (int)$crawler->getId());
+
+        return $adapter->fetchCol($select);
+    }
+
+    /**
+     * Save crawler category relations
+     *
+     * @param Maverick_Crawler_Model_Crawler $crawler
+     * @return $this
+     */
+    public function saveCategories(Maverick_Crawler_Model_Crawler $crawler)
+    {
+        $categoryIds    = $crawler->getCategoryIds();
+        $oldCategoryIds = $this->getCategoryIds($crawler);
+
+        $crawler->setIsChangedCategories(false);
+
+        $insert = array_diff($categoryIds, $oldCategoryIds);
+        $delete = array_diff($oldCategoryIds, $categoryIds);
+
+        $write = $this->_getWriteAdapter();
+        if (!empty($insert)) {
+            $data = array();
+            foreach ($insert as $categoryId) {
+                if (empty($categoryId)) {
+                    continue;
+                }
+                $data[] = array(
+                    'crawler_id'  => (int)$crawler->getId(),
+                    'category_id' => (int)$categoryId
+                );
+            }
+            if ($data) {
+                $write->insertMultiple($this->_crawlerCategoryTable, $data);
+            }
+        }
+
+        if (!empty($delete)) {
+            foreach ($delete as $categoryId) {
+                $where = array(
+                    'crawler_id = ?'  => (int)$crawler->getId(),
+                    'category_id = ?' => (int)$categoryId,
+                );
+
+                $write->delete($this->_crawlerCategoryTable, $where);
+            }
+        }
+
+        if (!empty($insert) || !empty($delete)) {
+            $crawler->setAffectedCategoryIds(array_merge($insert, $delete));
+            $crawler->setIsChangedCategories(true);
+        }
 
         return $this;
     }

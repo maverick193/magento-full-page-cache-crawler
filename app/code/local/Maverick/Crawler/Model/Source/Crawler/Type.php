@@ -77,4 +77,19 @@ class Maverick_Crawler_Model_Source_Crawler_Type
 
         return $result;
     }
+
+    public function getOptionAction($option)
+    {
+        $entities = Mage::app()->getConfig()->getNode('crawler/entities');
+        foreach ($entities->children() as $entity) {
+            if (!$entity->label || !$entity->class || !$entity->action) {
+                continue;
+            }
+
+            if ((string)$entity->class == $option) {
+                return $entity->action;
+            }
+        }
+        return false;
+    }
 }

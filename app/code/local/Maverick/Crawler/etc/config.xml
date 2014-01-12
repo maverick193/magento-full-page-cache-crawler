@@ -44,6 +44,9 @@
                     <crawler>
                         <table>maverick_crawler_entity</table>
                     </crawler>
+                    <type_category>
+                        <table>maverick_crawler_category</table>
+                    </type_category>
                 </entities>
             </maverick_crawler_resource>
         </models>
@@ -64,6 +67,35 @@
                 </setup>
             </maverick_crawler_setup>
         </resources>
+        <events>
+            <entity_type_category_save_after>
+                <observers>
+                    <maverick_crawler_categories_linkage>
+                        <type>model</type>
+                        <class>maverick_crawler/observer</class>
+                        <method>saveCategories</method>
+                    </maverick_crawler_categories_linkage>
+                </observers>
+            </entity_type_category_save_after>
+            <entity_type_category_save_before>
+                <observers>
+                    <maverick_crawler_format_categories>
+                        <type>model</type>
+                        <class>maverick_crawler/observer</class>
+                        <method>setCategoryIds</method>
+                    </maverick_crawler_format_categories>
+                </observers>
+            </entity_type_category_save_before>
+            <entity_type_category_load_after>
+                <observers>
+                    <maverick_crawler_load_categories>
+                        <type>model</type>
+                        <class>maverick_crawler/observer</class>
+                        <method>loadCategories</method>
+                    </maverick_crawler_load_categories>
+                </observers>
+            </entity_type_category_load_after>
+        </events>
     </global>
 
     <adminhtml>
@@ -96,6 +128,7 @@
             <category>
                 <label>Catalog Category</label>
                 <class>entity_type_category</class>
+                <action>categories</action>
             </category>
         </entities>
     </crawler>

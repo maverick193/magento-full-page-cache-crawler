@@ -43,9 +43,9 @@ class Maverick_Crawler_Block_Adminhtml_Crawler_Edit extends Mage_Adminhtml_Block
 
         parent::__construct();
 
-        if ($this->getCrawler()->getId()) {
+        if ($this->getCrawler()->getId() || (!$this->getCrawler()->getId() && $this->getRequest()->getParam('type'))) {
             $this->_updateButton('save', 'label', Mage::helper('maverick_crawler')->__('Save Crawler'));
-            $this->_updateButton('delete', 'label', Mage::helper('maverick_crawler')->__('Save Crawler'));
+            $this->_updateButton('delete', 'label', Mage::helper('maverick_crawler')->__('Delete Crawler'));
 
             $this->_addButton('saveandcontinue', array(
                 'label'     => Mage::helper('maverick_crawler')->__('Save and Continue Edit'),
@@ -58,6 +58,8 @@ class Maverick_Crawler_Block_Adminhtml_Crawler_Edit extends Mage_Adminhtml_Block
                     editForm.submit($('edit_form').action+'back/edit/');
                 }
             ";
+
+            $this->setFormActionUrl($this->getUrl('*/*/save', array('_current' => true)));
         } else {
             $this->_removeButton('save');
             $this->_removeButton('delete');

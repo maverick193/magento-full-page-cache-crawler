@@ -133,6 +133,17 @@ class Maverick_Crawler_Block_Adminhtml_Crawler_Grid extends Mage_Adminhtml_Block
     }
 
     /**
+     * Return row url for js event handlers
+     *
+     * @param Maverick_Crawler_Model_Crawler|Varien_Object
+     * @return string
+     */
+    public function getRowUrl($row)
+    {
+        return $this->getUrl('*/*/edit', array('id'=>$row->getId()));
+    }
+
+    /**
      * Return Grid URL for AJAX query
      *
      * @return string

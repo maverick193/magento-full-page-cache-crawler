@@ -2,3 +2,4 @@
 
 app/code/local/Maverick/Crawler app/code/local/Maverick/Crawler
 app/etc/modules/Maverick_Crawler.xml app/etc/modules/Maverick_Crawler.xml
+app/design/adminhtml/default/default/template/maverick/crawler/edit/tab/categories.phtml    app/design/adminhtml/default/default/template/maverick/crawler/edit/tab/categories.phtml

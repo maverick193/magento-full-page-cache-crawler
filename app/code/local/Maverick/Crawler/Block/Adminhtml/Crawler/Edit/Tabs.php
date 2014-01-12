@@ -42,13 +42,30 @@ class Maverick_Crawler_Block_Adminhtml_Crawler_Edit_Tabs extends Mage_Adminhtml_
 
     protected function _beforeToHtml()
     {
-        if ($this->getProduct()->getId() || (!$this->getProduct()->getId() && $this->getRequest()->getParam('type'))) {
+        if ($this->getCrawler()->getId() || (!$this->getCrawler()->getId() && $this->getRequest()->getParam('type'))) {
             $this->addTab('main', array(
                 'label'     => Mage::helper('maverick_crawler')->__('General Information'),
                 'title'     => Mage::helper('maverick_crawler')->__('General Information'),
                 'content'   => $this->getLayout()->createBlock('maverick_crawler/adminhtml_crawler_edit_tab_main')->toHtml(),
                 'active'    => true
             ));
+
+            if ($type = $this->_getCrawlerType()) {
+                $types      = Mage::getSingleton('maverick_crawler/source_crawler_type')->optionForGrid();
+                if ($action = Mage::getSingleton('maverick_crawler/source_crawler_type')->getOptionAction($type)) {
+                    $this->addTab($type, array(
+                        'label'     => Mage::helper('maverick_crawler')->__($types[$type]),
+                        'url'       => $this->getUrl("*/*/{$action}", array('_current' => true)),
+                        'class'     => 'ajax'
+                    ));
+                } else {
+                    $this->addTab($type, array(
+                        'label'     => Mage::helper('maverick_crawler')->__($types[$type]),
+                        'title'     => Mage::helper('maverick_crawler')->__($types[$type]),
+                        'content'   => $this->getLayout()->createBlock('maverick_crawler/adminhtml_crawler_edit_tab_' . $type)->toHtml()
+                    ));
+                }
+            }
         } else {
             $this->addTab('set', array(
                 'label'     => Mage::helper('maverick_crawler')->__('Settings'),
@@ -62,15 +79,29 @@ class Maverick_Crawler_Block_Adminhtml_Crawler_Edit_Tabs extends Mage_Adminhtml_
     }
 
     /**
-     * Retrive crawler object from block object if not from registry
+     * Retrieve crawler object from block object if not from registry
      *
      * @return Maverick_Crawler_Model_Crawler
      */
-    public function getProduct()
+    public function getCrawler()
     {
         if (!($this->getData('crawler') instanceof Maverick_Crawler_Model_Crawler)) {
             $this->setData('crawler', Mage::registry('current_crawler'));
         }
         return $this->getData('crawler');
+    }
+
+    /**
+     * Retrieve crawler type
+     *
+     * @return string
+     */
+    protected function _getCrawlerType()
+    {
+        if ($this->getCrawler()->getId()) {
+            return Mage::registry('current_crawler')->getType();
+        }
+
+        return $this->getRequest()->getParam('type');
     }
 }

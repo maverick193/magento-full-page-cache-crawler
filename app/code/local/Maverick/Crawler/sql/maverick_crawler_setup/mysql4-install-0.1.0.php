@@ -69,10 +69,8 @@ $table = $installer->getConnection()
         'default'   => '0',
     ), 'Crawler Scheduled In a Cron Job')
     ->addColumn('last_execution_at', Varien_Db_Ddl_Table::TYPE_DATETIME, null, array(
-        'nullable'        => false,
     ), 'Last Execution Date Time')
     ->addColumn('last_execution_mode', Varien_Db_Ddl_Table::TYPE_TEXT, 255, array(
-        'nullable'  => false,
     ), 'Last Execution Mode')
     ->addColumn('created_at', Varien_Db_Ddl_Table::TYPE_DATETIME, null, array(
         'nullable'        => false,
@@ -82,6 +80,34 @@ $table = $installer->getConnection()
     ), 'Updated At')
     ->setComment('Cache Crawler Entities');
 
+$installer->getConnection()->createTable($table);
+
+/**
+ * Create table 'maverick_crawler/type_category'
+ */
+$table = $installer->getConnection()
+    ->newTable($installer->getTable('maverick_crawler/type_category'))
+    ->addColumn('crawler_id', Varien_Db_Ddl_Table::TYPE_INTEGER, null, array(
+        'unsigned'  => true,
+        'nullable'  => false,
+        'primary'   => true,
+        'default'   => '0',
+    ), 'Crawler ID')
+    ->addColumn('category_id', Varien_Db_Ddl_Table::TYPE_INTEGER, null, array(
+        'unsigned'  => true,
+        'nullable'  => false,
+        'primary'   => true,
+        'default'   => '0',
+    ), 'Category ID')
+    ->addIndex($installer->getIdxName('maverick_crawler/type_category', array('category_id')),
+        array('category_id'))
+    ->addForeignKey($installer->getFkName('maverick_crawler/type_category', 'crawler_id', 'maverick_crawler/crawler', 'entity_id'),
+        'crawler_id', $installer->getTable('maverick_crawler/crawler'), 'entity_id',
+        Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE)
+    ->addForeignKey($installer->getFkName('maverick_crawler/type_category', 'category_id', 'catalog/category', 'entity_id'),
+        'category_id', $installer->getTable('catalog/category'), 'entity_id',
+        Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE)
+    ->setComment('Crawler To Category Linkage Table');
 $installer->getConnection()->createTable($table);
 
 $installer->endSetup();
