@@ -1,0 +1,16 @@
+{
+    "name":"maverick/magento-cache-crawler",
+    "type":"magento-module",
+    "license":"OSL-3.0",
+    "homepage":"https://github.com/maverick193/magento-cache-crawler",
+    "description":"Magento Cache and Full Page Cache Warmer Extension",
+    "require":{
+        "fabpot/goutte": "1.0.*@dev"
+    },
+    "authors":[
+        {
+            "name":"Mohammed NAHHAS",
+            "email":"m.nahhas@live.fr"
+        }
+    ]
+}
