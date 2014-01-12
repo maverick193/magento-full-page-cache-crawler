@@ -67,7 +67,7 @@ class Maverick_Crawler_Adminhtml_CrawlerController extends Mage_Adminhtml_Contro
         $crawler    = Mage::getModel('maverick_crawler/crawler');
 
         if ($id) {
-            $crawler->setLoadCategoryIds(true)->load($id);
+            $crawler->load($id);
             if (!$crawler->getId()) {
                 Mage::throwException($this->__('No crawler with ID "%s" found.', $id));
             }
@@ -237,7 +237,7 @@ class Maverick_Crawler_Adminhtml_CrawlerController extends Mage_Adminhtml_Contro
             }
         }
 
-        $this->_getSession()->addError(Mage::helper('cms')->__('Unable to find a crawler to delete.'));
+        $this->_getSession()->addError(Mage::helper('maverick_crawler')->__('Unable to find a crawler to delete.'));
         $this->_redirect('*/*/');
     }
 
@@ -265,5 +265,28 @@ class Maverick_Crawler_Adminhtml_CrawlerController extends Mage_Adminhtml_Contro
             }
         }
         $this->_redirect('*/*/index');
+    }
+
+    public function runAction()
+    {
+        if ($id = $this->getRequest()->getParam('id')) {
+            try {
+                $this->_initCrawler();
+                $crawler    = Mage::registry('current_crawler');
+                $result     = $crawler->run();
+
+                $this->_getSession()->addSuccess(
+                    $this->__('Crawler has been succefully executed.')
+                );
+            } catch (Exception $e) {
+                $this->_getSession()->addError($e->getMessage());
+            }
+
+            $this->_redirect('*/*/edit', array('id' => $id));
+            return;
+        }
+
+        $this->_getSession()->addError(Mage::helper('maverick_crawler')->__('Unable to find a crawler to run.'));
+        $this->_redirect('*/*/');
     }
 }

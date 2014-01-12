@@ -68,7 +68,7 @@
             </maverick_crawler_setup>
         </resources>
         <events>
-            <entity_type_category_save_after>
+            <crawler_type_category_save_after>
                 <observers>
                     <maverick_crawler_categories_linkage>
                         <type>model</type>
@@ -76,8 +76,8 @@
                         <method>saveCategories</method>
                     </maverick_crawler_categories_linkage>
                 </observers>
-            </entity_type_category_save_after>
-            <entity_type_category_save_before>
+            </crawler_type_category_save_after>
+            <crawler_type_category_save_before>
                 <observers>
                     <maverick_crawler_format_categories>
                         <type>model</type>
@@ -85,8 +85,8 @@
                         <method>setCategoryIds</method>
                     </maverick_crawler_format_categories>
                 </observers>
-            </entity_type_category_save_before>
-            <entity_type_category_load_after>
+            </crawler_type_category_save_before>
+            <crawler_type_category_load_after>
                 <observers>
                     <maverick_crawler_load_categories>
                         <type>model</type>
@@ -94,7 +94,7 @@
                         <method>loadCategories</method>
                     </maverick_crawler_load_categories>
                 </observers>
-            </entity_type_category_load_after>
+            </crawler_type_category_load_after>
         </events>
     </global>
 
@@ -127,7 +127,7 @@
         <entities>
             <category>
                 <label>Catalog Category</label>
-                <class>entity_type_category</class>
+                <class>crawler_type_category</class>
                 <action>categories</action>
             </category>
         </entities>

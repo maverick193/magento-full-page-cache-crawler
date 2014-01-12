@@ -95,4 +95,39 @@ class Maverick_Crawler_Model_Crawler extends Mage_Core_Model_Abstract
 
         return (array) $this->_getData('category_ids');
     }
+
+    /**
+     * Run Crawler
+     *
+     * @return array $result
+     */
+    public function run()
+    {
+        // Check crawler type
+        if (!$this->getType()) {
+            //@todo log
+            Mage::throwException(
+                Mage::helper('maverick_crawler')->__('Unable to run crawler, type is not found or not defined')
+            );
+        }
+
+        // Check crawler type object
+        $obj = Mage::getSingleton('maverick_crawler/' . $this->getType());
+        if (!is_object($obj)) {
+            Mage::throwException(
+                Mage::helper('maverick_crawler')->__('Unable to run crawler, cannot instantiate crawler type')
+            );
+        }
+
+        // Check run method exists
+        if (!method_exists($obj, 'run')) {
+            Mage::throwException(
+                Mage::helper('maverick_crawler')->__('Unable to run crawler, run method does not exist')
+            );
+        }
+
+        $result = $obj->run($this);
+
+        return $result;
+    }
 }
