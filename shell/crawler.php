@@ -86,7 +86,7 @@ class Maverick_Shell_Crawler extends Mage_Shell_Abstract
             } catch (Mage_Core_Exception $e) {
                 echo $e->getMessage() . "\n";
             } catch (Exception $e) {
-                echo Mage::helper('mo_maxoutil')->__('Crawler unknown error:\n');
+                echo Mage::helper('maverick_crawler')->__('Crawler unknown error:\n');
                 echo $e . "\n";
             }
         } else {

@@ -25,7 +25,7 @@
  * Crawler helper
  * @class Maverick_Crawler_Helper_Crawler
  */
-require_once Mage::getBaseDir() . '/../vendor/autoload.php';
+require_once(dirname(__FILE__) . '/../../../../../../../../autoload.php');
 
 class Maverick_Crawler_Helper_Crawler extends Mage_Core_Helper_Abstract
 {
