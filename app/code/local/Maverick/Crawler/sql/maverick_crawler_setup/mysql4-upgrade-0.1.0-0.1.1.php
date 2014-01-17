@@ -22,22 +22,19 @@
  */
 
 /**
- * Helper data
- * @class Maverick_Crawler_Helper_Data
+ * Upgrade script
+ *
+ * The file was named mysql4-upgrade-0.1.0-0.1.1.php for
+ * compatibility with versions < 1.6
  */
 
-class Maverick_Crawler_Helper_Data extends Mage_Core_Helper_Abstract
-{
-    protected $_log_file = 'maverick_crawler.log';
+/* @var $installer Mage_Core_Model_Resource_Setup */
+$installer = $this;
 
-    /**
-     * Log Facility
-     *
-     * @param $message
-     * @param $level
-     */
-    public function log($message, $level = Zend_Log::DEBUG)
-    {
-        Mage::log($message, $level, $this->_log_file, true);
-    }
-}
+$installer->startSetup();
+
+$installer->getConnection()->addColumn(
+    $installer->getTable('maverick_crawler/crawler'), 'scan', 'tinyint(1) unsigned default 0'
+);
+
+$installer->endSetup();

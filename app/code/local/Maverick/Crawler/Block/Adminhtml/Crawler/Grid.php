@@ -87,6 +87,13 @@ class Maverick_Crawler_Block_Adminhtml_Crawler_Grid extends Mage_Adminhtml_Block
             'options'   => Mage::getSingleton('adminhtml/system_config_source_yesno')->toArray(),
         ));
 
+        $this->addColumn('scan', array(
+            'header'    => Mage::helper('maverick_crawler')->__('Scan Option'),
+            'index'     => 'scan',
+            'type'      => 'options',
+            'options'   => Mage::getSingleton('adminhtml/system_config_source_yesno')->toArray(),
+        ));
+
         $this->addColumn('last_execution_at', array(
             'header'    => Mage::helper('maverick_crawler')->__('Last Execution at'),
             'index'     => 'last_execution_at',

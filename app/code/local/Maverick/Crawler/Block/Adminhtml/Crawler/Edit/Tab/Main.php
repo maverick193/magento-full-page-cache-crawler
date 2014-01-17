@@ -77,6 +77,15 @@ class Maverick_Crawler_Block_Adminhtml_Crawler_Edit_Tab_Main extends Mage_Adminh
             'options'   => Mage::getSingleton('adminhtml/system_config_source_yesno')->toArray(),
         ));
 
+        $fieldset->addField('scan', 'select', array(
+            'label'     => Mage::helper('maverick_crawler')->__('Enable Scan'),
+            'title'     => Mage::helper('maverick_crawler')->__('Enable Scan'),
+            'name'      => 'scan',
+            'note'      => Mage::helper('maverick_crawler')->__('This will scan every url visited and get all of links in order to crawl them'),
+            'required'  => true,
+            'options'   => Mage::getSingleton('adminhtml/system_config_source_yesno')->toArray(),
+        ));
+
         $form->setValues($crawler->getData());
         $this->setForm($form);
         return $this;

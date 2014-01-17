@@ -29,7 +29,7 @@
 <config>
     <modules>
         <Maverick_Crawler>
-            <version>0.1.0</version>
+            <version>0.1.1</version>
         </Maverick_Crawler>
     </modules>
     <global>
@@ -132,4 +132,28 @@
             </category>
         </entities>
     </crawler>
+
+    <!-- Crawler Cron Job -->
+    <crontab>
+        <jobs>
+            <maverick_page_cache_crawler>
+                <schedule>
+                    <cron_expr>0/5 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>maverick_crawler/cron::crawl</model>
+                </run>
+            </maverick_page_cache_crawler>
+        </jobs>
+    </crontab>
+
+    <default>
+        <crawler>
+            <general>
+                <max_time>7200</max_time>
+                <clicks>2</clicks>
+                <log_url>1</log_url>
+            </general>
+        </crawler>
+    </default>
 </config>

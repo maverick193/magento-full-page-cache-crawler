@@ -32,7 +32,24 @@ interface Maverick_Crawler_Model_Crawler_Type_Interface
      * Run Crawler
      *
      * @param Maverick_Crawler_Model_Crawler $crawler
+     * @param $mode
      * @return array
      */
-    public function run(Maverick_Crawler_Model_Crawler $crawler);
+    public function run(Maverick_Crawler_Model_Crawler $crawler, $mode = Maverick_Crawler_Model_Crawler::MODE_MANUAL);
+
+    /**
+     * Return an array of urls to crawl
+     *
+     * @return array
+     */
+    public function getUrls();
+
+    /**
+     * Warm up a single url
+     *
+     * @param string $url
+     * @return mixed
+     */
+    public function runUrl($url);
+
 }

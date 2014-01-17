@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Maverick_Crawler Extension
+ *
+ * NOTICE OF LICENSE
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ * @version     0.1.0
+ * @category    Maverick
+ * @package     Maverick_Crawler
+ * @author      Mohammed NAHHAS <m.nahhas@live.fr>
+ * @copyright   Copyright (c) 2014 Mohammed NAHHAS
+ * @licence     OSL - Open Software Licence 3.0
+ *
+ */
+
+/**
+ * System XML
+ */
+-->
+<config>
+    <tabs>
+        <maverick translate="label">
+            <label>Maverick Extensions</label>
+            <sort_order>111</sort_order>
+        </maverick>
+    </tabs>
+    <sections>
+        <crawler translate="label" module="maverick_crawler">
+            <label>Cache Crawler</label>
+            <tab>maverick</tab>
+            <sort_order>20</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>0</show_in_website>
+            <show_in_store>0</show_in_store>
+            <groups>
+                <!-- General Configuration -->
+                <general translate="label" module="maverick_crawler">
+                    <label>General Configuration</label>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <max_time translate="label" module="maverick_crawler">
+                            <label>Maximum time of crawling in seconds</label>
+                            <sort_order>10</sort_order>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <tooltip>If crawlers take more than this value, the process stops</tooltip>
+                            <comment>Default is 7200 (2h)</comment>
+                        </max_time>
+                        <clicks translate="label" module="maverick_crawler">
+                            <label>Number of requests</label>
+                            <sort_order>20</sort_order>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>Number of visits for each Url crawled</comment>
+                        </clicks>
+                        <log_url translate="label" module="maverick_crawler">
+                            <label>Enable crawling log</label>
+                            <sort_order>30</sort_order>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>WARNING!! It may create a heavy/large log files</comment>
+                        </log_url>
+                    </fields>
+                </general>
+            </groups>
+        </crawler>
+    </sections>
+</config>

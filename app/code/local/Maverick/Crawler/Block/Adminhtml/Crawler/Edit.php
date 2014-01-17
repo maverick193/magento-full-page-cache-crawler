@@ -59,7 +59,8 @@ class Maverick_Crawler_Block_Adminhtml_Crawler_Edit extends Mage_Adminhtml_Block
                 }
             ";
 
-            if ($this->getCrawler()->getId()) {
+            if ($this->getCrawler()->getId() &&
+               ($this->getCrawler()->getStatus() == Maverick_Crawler_Model_Crawler::STATUS_ENABLED)) {
 
                 $message = Mage::helper('maverick_crawler')->__('Crawling may take several time if you choose lot of pages, Are you sure that you want run it?');
                 $this->_addButton('run', array(

@@ -31,6 +31,10 @@ class Maverick_Crawler_Model_Crawler extends Mage_Core_Model_Abstract
     const STATUS_ENABLED    = 1;
     const STATUS_DISABLED   = 0;
 
+    const MODE_MANUAL       = 'Manual';
+    const MODE_CRON         = 'Cron';
+    const MODE_SHELL        = 'Shell';
+
     protected $_eventPrefix = 'maverick_crawler';
 
     /**
@@ -96,12 +100,7 @@ class Maverick_Crawler_Model_Crawler extends Mage_Core_Model_Abstract
         return (array) $this->_getData('category_ids');
     }
 
-    /**
-     * Run Crawler
-     *
-     * @return array $result
-     */
-    public function run()
+    protected function _beforeRun($method = 'run')
     {
         // Check crawler type
         if (!$this->getType()) {
@@ -120,14 +119,39 @@ class Maverick_Crawler_Model_Crawler extends Mage_Core_Model_Abstract
         }
 
         // Check run method exists
-        if (!method_exists($obj, 'run')) {
+        if (!method_exists($obj, $method)) {
             Mage::throwException(
-                Mage::helper('maverick_crawler')->__('Unable to run crawler, run method does not exist')
+                Mage::helper('maverick_crawler')->__('Unable to run crawler, %s() method does not exist', $method)
             );
         }
 
-        $result = $obj->run($this);
+        return $obj;
+    }
+
+    /**
+     * Run Crawler
+     *
+     * @param string $mode
+     * @return array $result
+     */
+    public function run($mode = self::MODE_MANUAL)
+    {
+        $obj    = $this->getFactory();
+        $result = $obj->run($this, $mode);
 
         return $result;
+    }
+
+    /**
+     * Get crawler type instance
+     *
+     * @return mixed
+     */
+    public function getFactory()
+    {
+        $obj = $this->_beforeRun();
+        $obj->setCrawler($this);
+
+        return $obj;
     }
 }
