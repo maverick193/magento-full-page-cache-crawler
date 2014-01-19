@@ -58,11 +58,10 @@ class Maverick_Shell_Crawler extends Mage_Shell_Abstract
 
                 $start = $time = time();
 
-                foreach ($urls as $url) {
-                    $url = Mage::getBaseUrl('web') . 'index.php' . $url . '.html';
+                foreach ($urls as $url) {;
                     $crawlerObj = $this->_runUrl($factory, $url);
                     if (is_string($crawlerObj)) {
-                        echo '    ->' . $crawlerObj . "\n";
+                        echo '    ' . $crawlerObj . "\n";
                         continue;
                     }
                     if ($scan) {
@@ -74,7 +73,7 @@ class Maverick_Shell_Crawler extends Mage_Shell_Abstract
                         foreach ($scanedUrls as $scanedUrl) {
                             $res = $this->_runUrl($factory, $scanedUrl);
                             if (is_string($res)) {
-                                echo '    ->' . $res . "\n";
+                                echo '    ' . $res . "\n";
                             }
                         }
                     }

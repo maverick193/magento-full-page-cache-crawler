@@ -138,7 +138,7 @@
         <jobs>
             <maverick_page_cache_crawler>
                 <schedule>
-                    <cron_expr>0/5 * * * *</cron_expr>
+                    <cron_expr>0 4 * * *</cron_expr>
                 </schedule>
                 <run>
                     <model>maverick_crawler/cron::crawl</model>

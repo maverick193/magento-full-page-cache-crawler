@@ -29,7 +29,7 @@
 class Maverick_Crawler_Model_Observer
 {
     /**
-     * Set assigned category IDs array to product
+     * Set assigned category IDs array to crawler
      *
      * @param Varien_Event_Observer $observer
      */

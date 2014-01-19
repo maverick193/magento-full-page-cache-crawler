@@ -100,7 +100,7 @@ class Maverick_Crawler_Model_Crawler extends Mage_Core_Model_Abstract
         return (array) $this->_getData('category_ids');
     }
 
-    protected function _beforeRun($method = 'run')
+    protected function _beforeRun()
     {
         // Check crawler type
         if (!$this->getType()) {
@@ -119,9 +119,9 @@ class Maverick_Crawler_Model_Crawler extends Mage_Core_Model_Abstract
         }
 
         // Check run method exists
-        if (!method_exists($obj, $method)) {
+        if (!method_exists($obj, 'run')) {
             Mage::throwException(
-                Mage::helper('maverick_crawler')->__('Unable to run crawler, %s() method does not exist', $method)
+                Mage::helper('maverick_crawler')->__('Unable to run crawler, run() method does not exist')
             );
         }
 

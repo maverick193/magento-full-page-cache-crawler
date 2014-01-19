@@ -33,7 +33,9 @@ class Maverick_Crawler_Model_Cron
     public function crawl()
     {
         $helper = Mage::helper('maverick_crawler');
-        $helper->log($helper->__('###### Start Crawling via Cron Job ######'));
+        $helper->log(
+            $helper->__('###### Start Crawling via Cron Job At %s ######', Mage::getModel('core/date')->date('Y-m-d H:i:s'))
+        );
 
         $crawlers = Mage::getResourceModel('maverick_crawler/crawler_collection')
                             ->addFieldToFilter('scheduled', array('eq' => self::CRAWLER_SCHEDULED))

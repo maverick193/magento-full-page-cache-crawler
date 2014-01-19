@@ -67,4 +67,65 @@ abstract class Maverick_Crawler_Model_Crawler_Type_Abstract
         $url = $this->_crawler_helper->getPageLinks($crawlObj);
         return $url;
     }
+
+    /**
+     * Run Crawler
+     *
+     * @param Maverick_Crawler_Model_Crawler $crawler
+     * @param $mode
+     * @return array
+     */
+    public function run(Maverick_Crawler_Model_Crawler $crawler, $mode = Maverick_Crawler_Model_Crawler::MODE_MANUAL)
+    {
+        $errors     = array();
+        $urls       = $this->getUrls();
+        $logEnabled = Mage::getStoreConfig('crawler/general/log_url');
+        $helper     = Mage::helper('maverick_crawler');
+
+        // Log Start
+        if ($logEnabled) {
+            $helper->log($helper->__('###### Starting Crawler ID %s ######', $crawler->getId()));
+        }
+
+        foreach ($urls as $url) {
+            if ($logEnabled) {
+                $helper->log($helper->__('--> Warming Up %s (%s time(s))', $url, $this->_nbr_of_visits));
+            }
+            $crawlerObj = $this->_crawler_helper->visit($url, $this->_nbr_of_visits);
+
+            if (!is_object($crawlerObj)) {
+                $errors[0] = Mage::helper('maverick_crawler')->__('Some errors encountered while crawling, check your log file');
+                continue;
+            }
+
+            if ($crawler->getScan() == '1') {
+                $pageLinks = $this->_crawler_helper->getPageLinks($crawlerObj);
+                if ($logEnabled) {
+                    $helper->log($helper->__('--> Scan Option is enabled, scanning %s', $url));
+                    $helper->log($helper->__('--> Scan Option found %s urls', count($pageLinks)));
+                    $helper->log($helper->__('--> Crawling Them ...'));
+                }
+                foreach ($pageLinks as $link) {
+                    $start  = time();
+                    $this->_crawler_helper->visit($link, $this->_nbr_of_visits);
+                    $end    = time() - $start;
+                    if ($logEnabled) {
+                        $helper->log(
+                            $helper->__('    --> Warming Up %s (%s time(s), Took %s secondes)', $link, $this->_nbr_of_visits, $end)
+                        );
+                    }
+                }
+            }
+        }
+
+        if ($logEnabled) {
+            $helper->log($helper->__('###### End Process Crawler ID %s ######', $crawler->getId()));
+        }
+
+        $crawler->setLastExecutionMode($mode)
+            ->setLastExecutionAt(Mage::getModel('core/date')->date('Y-m-d H:i:s'))
+            ->save();
+
+        return $errors;
+    }
 }
