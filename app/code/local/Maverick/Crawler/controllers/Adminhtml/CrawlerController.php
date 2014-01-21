@@ -137,8 +137,7 @@ class Maverick_Crawler_Adminhtml_CrawlerController extends Mage_Adminhtml_Contro
     }
 
     /**
-     * Get categories fieldset block
-     *
+     * Categories tree tab
      */
     public function categoriesAction()
     {
@@ -147,6 +146,20 @@ class Maverick_Crawler_Adminhtml_CrawlerController extends Mage_Adminhtml_Contro
             $this->getLayout()->createBlock(
                 'maverick_crawler/adminhtml_crawler_edit_tab_entity_type_category',
                 'crawler_categories'
+            )->toHtml()
+        );
+    }
+
+    /**
+     * CMS Page tab
+     */
+    public function cmsAction()
+    {
+        $this->_initCrawler();
+        $this->getResponse()->setBody(
+            $this->getLayout()->createBlock(
+                'maverick_crawler/adminhtml_crawler_edit_tab_entity_type_cms',
+                'crawler_cms'
             )->toHtml()
         );
     }
@@ -198,6 +211,15 @@ class Maverick_Crawler_Adminhtml_CrawlerController extends Mage_Adminhtml_Contro
                 $label  = isset($types[$crawler->getType()]) ? $types[$crawler->getType()] : '';
 
                 $session->addSuccess($this->__('%s Crawler (ID %s) has been saved.', $label, $crawler->getId()));
+
+                if ($crawler->getScheduled() && !Mage::getStoreConfigFlag('crawler/cron/enabled')) {
+                    $session->addNotice(
+                        $this->__('Crawler has been set to "Scheduled", don\'t forget to enable cron jobs in <a href="%s" target="_blank">module configuration</a>',
+                            $this->getUrl('adminhtml/system_config/edit', array('section' => 'crawler'))
+                        )
+                    );
+                }
+
                 if ($redirectBack) {
                     $this->_redirect('*/*/edit', array('id' => $crawler->getId(),'_current'=>true));
                 } else {

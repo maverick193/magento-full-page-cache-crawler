@@ -87,7 +87,7 @@ class Maverick_Crawler_Model_Source_Crawler_Type
             }
 
             if ((string)$entity->class == $option) {
-                return $entity->action;
+                return (string)$entity->action;
             }
         }
         return false;

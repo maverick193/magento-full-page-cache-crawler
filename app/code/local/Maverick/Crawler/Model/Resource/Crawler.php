@@ -36,12 +36,20 @@ class Maverick_Crawler_Model_Resource_Crawler extends Mage_Core_Model_Resource_D
     protected $_crawlerCategoryTable;
 
     /**
+     * Crawler to cms page linkage table
+     *
+     * @var string
+     */
+    protected $_crawlerCmsTable;
+
+    /**
      * Resource initialization
      */
     protected function _construct()
     {
         $this->_init('maverick_crawler/crawler', 'entity_id');
-        $this->_crawlerCategoryTable = $this->getTable('maverick_crawler/type_category');
+        $this->_crawlerCategoryTable    = $this->getTable('maverick_crawler/type_category');
+        $this->_crawlerCmsTable         = $this->getTable('maverick_crawler/type_cms');
     }
 
     /**
@@ -73,6 +81,23 @@ class Maverick_Crawler_Model_Resource_Crawler extends Mage_Core_Model_Resource_D
 
         $select = $adapter->select()
             ->from($this->_crawlerCategoryTable, 'category_id')
+            ->where('crawler_id = ?', (int)$crawler->getId());
+
+        return $adapter->fetchCol($select);
+    }
+
+    /**
+     * Retrieve crawler page identifiers
+     *
+     * @param Maverick_Crawler_Model_Crawler $crawler
+     * @return array
+     */
+    public function getPageIds(Maverick_Crawler_Model_Crawler $crawler)
+    {
+        $adapter = $this->_getReadAdapter();
+
+        $select = $adapter->select()
+            ->from($this->_crawlerCmsTable, 'page_id')
             ->where('crawler_id = ?', (int)$crawler->getId());
 
         return $adapter->fetchCol($select);
@@ -125,6 +150,58 @@ class Maverick_Crawler_Model_Resource_Crawler extends Mage_Core_Model_Resource_D
         if (!empty($insert) || !empty($delete)) {
             $crawler->setAffectedCategoryIds(array_merge($insert, $delete));
             $crawler->setIsChangedCategories(true);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Save crawler cms page relations
+     *
+     * @param Maverick_Crawler_Model_Crawler $crawler
+     * @return $this
+     */
+    public function savePages($crawler)
+    {
+        $pageIds    = $crawler->getPageIds();
+        $oldPageIds = $this->getPageIds($crawler);
+
+        $crawler->setIsChangedPages(false);
+
+        $insert = array_diff($pageIds, $oldPageIds);
+        $delete = array_diff($oldPageIds, $pageIds);
+
+        $write = $this->_getWriteAdapter();
+        if (!empty($insert)) {
+            $data = array();
+            foreach ($insert as $pageId) {
+                if (empty($pageId)) {
+                    continue;
+                }
+                $data[] = array(
+                    'crawler_id'    => (int)$crawler->getId(),
+                    'page_id'       => (int)$pageId
+                );
+            }
+            if ($data) {
+                $write->insertMultiple($this->_crawlerCmsTable, $data);
+            }
+        }
+
+        if (!empty($delete)) {
+            foreach ($delete as $pageId) {
+                $where = array(
+                    'crawler_id = ?'    => (int)$crawler->getId(),
+                    'page_id = ?'       => (int)$pageId,
+                );
+
+                $write->delete($this->_crawlerCmsTable, $where);
+            }
+        }
+
+        if (!empty($insert) || !empty($delete)) {
+            $crawler->setAffectedPageIds(array_merge($insert, $delete));
+            $crawler->setIsChangedPages(true);
         }
 
         return $this;

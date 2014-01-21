@@ -58,7 +58,7 @@ class Maverick_Shell_Crawler extends Mage_Shell_Abstract
 
                 $start = $time = time();
 
-                foreach ($urls as $url) {;
+                foreach ($urls as $url) {
                     $crawlerObj = $this->_runUrl($factory, $url);
                     if (is_string($crawlerObj)) {
                         echo '    ' . $crawlerObj . "\n";
@@ -81,6 +81,12 @@ class Maverick_Shell_Crawler extends Mage_Shell_Abstract
 
                 $totalTime = date("H:i:s", (int)(time() - $start));
                 echo "\n" . "\n";
+
+                echo $helper->__('### Crawler Finished, updating last execution mode and date ###') . "\n";
+                $crawler->setLastExecutionMode(Maverick_Crawler_Model_Crawler::MODE_SHELL)
+                        ->setLastExecutionAt(Mage::getModel('core/date')->date('Y-m-d H:i:s'))
+                        ->save();
+
                 echo $helper->__('TOTAL TIME %s - %s urls crawled', $totalTime, $countUrls). "\n";
             } catch (Mage_Core_Exception $e) {
                 echo $e->getMessage() . "\n";

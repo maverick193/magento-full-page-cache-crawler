@@ -22,11 +22,11 @@
  */
 
 /**
- * Category crawler model
- * @class Maverick_Crawler_Model_Crawler_Type_Category
+ * CMS page crawler model
+ * @class Maverick_Crawler_Model_Crawler_Type_Cms
  */
 
-class Maverick_Crawler_Model_Crawler_Type_Category extends Maverick_Crawler_Model_Crawler_Type_Abstract
+class Maverick_Crawler_Model_Crawler_Type_Cms extends Maverick_Crawler_Model_Crawler_Type_Abstract
 {
     /**
      * Run Crawler
@@ -39,60 +39,45 @@ class Maverick_Crawler_Model_Crawler_Type_Category extends Maverick_Crawler_Mode
     {
         parent::run($crawler, $mode);
     }
-
     /**
-     * Retrieve all selected categories urls
+     * Retrieve all selected cms pages urls
      *
      * @return array
      */
     public function getUrls()
     {
-        $categoryIds    = $this->getCrawler()->getCategoryIds();
-        $category       = Mage::getModel('catalog/category');
-        $helper         = Mage::helper('maverick_crawler');
-        $urls           = array();
+        $pageIds    = $this->getCrawler()->getPageIds();
+        $page       = Mage::getModel('cms/page');
+        $helper     = Mage::helper('maverick_crawler');
+        $urls       = array();
 
-        foreach ($categoryIds as $id) {
-            $category->load($id);
+        foreach ($pageIds as $id) {
+            $page->load($id);
 
-            if (!$category->getId()) {
-                $helper->log($helper->__('Unable to load category with ID %s', $id));
+            if (!$page->getId()) {
+                $helper->log($helper->__('Unable to load cms page with ID %s', $id));
                 continue;
             }
 
             if ($_SERVER['HTTP_HOST']) {
                 // to run crawler from admin
-                $urls[] = $category->getUrl();
+                $urls[] = Mage::getModel('core/url')->getUrl($page->getIdentifier());
             } else {
                 // to run crawler from shell
                 $host = Mage::getStoreConfig(Mage_Core_Model_Store::XML_PATH_USE_REWRITES) ?
                         Mage::getBaseUrl('web') : Mage::getBaseUrl('web') . 'index.php/';
 
-                $categoryUrlPath = $this->_formatCategoryUrlPath($category->getUrlPath());
-                $urls[] = $host . $categoryUrlPath;
+                $identifier = $page->getIdentifier();
+                if (substr($identifier, 0, 1) == '/') {
+                    $identifier = substr($identifier, 1);
+                }
+                $urls[] = $host . $identifier;
             }
 
             // clear instance data
-            $category->setData(array());
-            $category->setOrigData();
+            $page->setData(array());
+            $page->setOrigData();
         }
         return $urls;
-    }
-
-    protected function _formatCategoryUrlPath($urlPath)
-    {
-        if (empty($urlPath)) {
-            return '';
-        }
-
-        if (substr($urlPath, 0, 1) == '/') {
-            $urlPath = substr($urlPath, 1);
-        }
-
-        if (substr($urlPath, -5) != '.html') {
-            $urlPath .= '.html';
-        }
-
-        return $urlPath;
     }
 }

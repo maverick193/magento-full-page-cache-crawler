@@ -30,8 +30,14 @@ class Maverick_Crawler_Model_Cron
     const CRAWLER_SCHEDULED         = 1;
     const CRAWLER_NOT_SCHEDULED     = 0;
 
+    const XML_PATH_CRON_ENABLED = 'crawler/cron/enabled';
+
     public function crawl()
     {
+        if (!Mage::getStoreConfigFlag(self::XML_PATH_CRON_ENABLED)) {
+            return $this;
+        }
+
         $helper = Mage::helper('maverick_crawler');
         $helper->log(
             $helper->__('###### Start Crawling via Cron Job At %s ######', Mage::getModel('core/date')->date('Y-m-d H:i:s'))

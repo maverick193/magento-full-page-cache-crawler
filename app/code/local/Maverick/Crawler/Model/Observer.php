@@ -78,11 +78,32 @@ class Maverick_Crawler_Model_Observer
         $crawler->getResource()->saveCategories($crawler);
     }
 
+    /**
+     * Save crawler cms page relations
+     *
+     * @param Varien_Event_Observer $observer
+     */
+    public function saveCmsPages(Varien_Event_Observer $observer)
+    {
+        // An additional check (why not)
+        if (!Mage::app()->getStore()->isAdmin()) {
+            return;
+        }
+        $crawler  = $observer->getEvent()->getObject();
+
+        /**
+         * If page ids data is not declared we haven't do manipulations
+         */
+        if (!$crawler->hasPageIds()) {
+            return ;
+        }
+
+        $crawler->getResource()->savePages($crawler);
+    }
+
     public function loadCategories(Varien_Event_Observer $observer)
     {
         $crawler  = $observer->getEvent()->getObject();
-        //if ($crawler->hasLoadCategoryIds()) {
-            $crawler->getCategoryIds();
-        //}
+        $crawler->getCategoryIds();
     }
 }

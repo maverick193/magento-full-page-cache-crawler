@@ -100,6 +100,21 @@ class Maverick_Crawler_Model_Crawler extends Mage_Core_Model_Abstract
         return (array) $this->_getData('category_ids');
     }
 
+    /**
+     * Retrieve assigned page Ids
+     *
+     * @return array
+     */
+    public function getPageIds()
+    {
+        if (!$this->hasData('page_ids')) {
+            $ids = $this->_getResource()->getPageIds($this);
+            $this->setData('page_ids', $ids);
+        }
+
+        return (array) $this->_getData('page_ids');
+    }
+
     protected function _beforeRun()
     {
         // Check crawler type
