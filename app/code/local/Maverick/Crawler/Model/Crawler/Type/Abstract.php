@@ -70,6 +70,7 @@ abstract class Maverick_Crawler_Model_Crawler_Type_Abstract
 
     /**
      * Run Crawler
+     * @todo Cleanup code and code review
      *
      * @param Maverick_Crawler_Model_Crawler $crawler
      * @param $mode
@@ -82,19 +83,33 @@ abstract class Maverick_Crawler_Model_Crawler_Type_Abstract
         $logEnabled = Mage::getStoreConfig('crawler/general/log_url');
         $helper     = Mage::helper('maverick_crawler');
 
+        $maxTime    = Mage::getStoreConfig('crawler/general/max_time');
+        $startTime  = Mage::getStoreConfigFlag('crawler/general/max_time') ? time() : false;
+
         // Log Start
         if ($logEnabled) {
             $helper->log($helper->__('###### Starting Crawler ID %s ######', $crawler->getId()));
         }
 
         foreach ($urls as $url) {
+            $maxTimeExceeded = $startTime && ($maxTime < (time() - $startTime));
+            if ($maxTimeExceeded) {
+                $errMessage = Mage::helper('maverick_crawler')->__('--> ### Stoping Crawler, Maximum Time Of Crawling Exceeded (%s secondes)', $maxTime);
+                if ($logEnabled) {
+                    Mage::helper('maverick_crawler')->log($errMessage);
+                }
+
+                $errors[] = $errMessage;
+                break;
+            }
+
             if ($logEnabled) {
                 $helper->log($helper->__('--> Warming Up %s (%s time(s))', $url, $this->_nbr_of_visits));
             }
             $crawlerObj = $this->_crawler_helper->visit($url, $this->_nbr_of_visits);
 
             if (!is_object($crawlerObj)) {
-                $errors[0] = Mage::helper('maverick_crawler')->__('Some errors encountered while crawling, check your log file');
+                $errors[] = Mage::helper('maverick_crawler')->__('Some errors encountered while crawling, check your log file');
                 continue;
             }
 
@@ -106,6 +121,16 @@ abstract class Maverick_Crawler_Model_Crawler_Type_Abstract
                     $helper->log($helper->__('--> Crawling Them ...'));
                 }
                 foreach ($pageLinks as $link) {
+                    $maxTimeExceeded = $startTime && ($maxTime < (time() - $startTime));
+                    if ($maxTimeExceeded) {
+                        $errMessage = Mage::helper('maverick_crawler')->__('--> ### Stoping Scanning, Maximum Time Of Crawling Exceeded (%s secondes)', $maxTime);
+                        if ($logEnabled) {
+                            Mage::helper('maverick_crawler')->log($errMessage);
+                        }
+
+                        $errors[] = $errMessage;
+                        break;
+                    }
                     $start  = time();
                     $this->_crawler_helper->visit($link, $this->_nbr_of_visits);
                     $end    = time() - $start;

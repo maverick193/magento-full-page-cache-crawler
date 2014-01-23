@@ -37,7 +37,7 @@ class Maverick_Crawler_Model_Crawler_Type_Category extends Maverick_Crawler_Mode
      */
     public function run(Maverick_Crawler_Model_Crawler $crawler, $mode = Maverick_Crawler_Model_Crawler::MODE_MANUAL)
     {
-        parent::run($crawler, $mode);
+        return parent::run($crawler, $mode);
     }
 
     /**

@@ -34,11 +34,13 @@ class Maverick_Crawler_Model_Cron
 
     public function crawl()
     {
+        $helper = Mage::helper('maverick_crawler');
         if (!Mage::getStoreConfigFlag(self::XML_PATH_CRON_ENABLED)) {
-            return $this;
+            return $helper->__('Crawling via Cron disabled in module configuration');
         }
 
-        $helper = Mage::helper('maverick_crawler');
+        $errors = array();
+
         $helper->log(
             $helper->__('###### Start Crawling via Cron Job At %s ######', Mage::getModel('core/date')->date('Y-m-d H:i:s'))
         );
@@ -51,7 +53,10 @@ class Maverick_Crawler_Model_Cron
 
         foreach ($crawlers as $crawler) {
             try {
-                $crawler->run(Maverick_Crawler_Model_Crawler::MODE_CRON);
+                $errors = $crawler->run(Maverick_Crawler_Model_Crawler::MODE_CRON);
+                if (!empty($errors)) {
+                    break;
+                }
             } catch (Exception $e) {
                 $helper->log($e->getMessage(), Zend_Log::ERR);
                 continue;
@@ -59,6 +64,10 @@ class Maverick_Crawler_Model_Cron
         }
 
         $helper->log($helper->__('###### End Crawling via Cron Job ######'));
-        return $helper->__('%d Crawlers Scheduled/Enabled successfully executed', $crawlers->count());
+        $message = empty($errors) ?
+                   $helper->__('%d Crawlers Scheduled/Enabled successfully executed', $crawlers->count()) :
+                   $helper->__('%d Crawlers did not finished, check your log files if enabled', $crawlers->count());
+
+        return $message;
     }
 }

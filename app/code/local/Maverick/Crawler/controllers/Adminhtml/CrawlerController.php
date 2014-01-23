@@ -295,11 +295,20 @@ class Maverick_Crawler_Adminhtml_CrawlerController extends Mage_Adminhtml_Contro
             try {
                 $this->_initCrawler();
                 $crawler    = Mage::registry('current_crawler');
-                $result     = $crawler->run();
+                $errors     = $crawler->run();
 
-                $this->_getSession()->addSuccess(
-                    $this->__('Crawler has been succefully executed.')
-                );
+                if (empty($errors)) {
+                    $this->_getSession()->addSuccess(
+                        $this->__('Crawler has been succefully executed.')
+                    );
+                } else {
+                    foreach ($errors as $error) {
+                        $this->_getSession()->addError($error);
+                    }
+                    $this->_getSession()->addNotice(
+                        Mage::helper('maverick_crawler')->__('Crawler did not finish crawling all requested urls')
+                    );
+                }
             } catch (Exception $e) {
                 $this->_getSession()->addError($e->getMessage());
             }

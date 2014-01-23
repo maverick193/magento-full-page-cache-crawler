@@ -37,7 +37,7 @@ class Maverick_Crawler_Model_Crawler_Type_Cms extends Maverick_Crawler_Model_Cra
      */
     public function run(Maverick_Crawler_Model_Crawler $crawler, $mode = Maverick_Crawler_Model_Crawler::MODE_MANUAL)
     {
-        parent::run($crawler, $mode);
+        return parent::run($crawler, $mode);
     }
     /**
      * Retrieve all selected cms pages urls

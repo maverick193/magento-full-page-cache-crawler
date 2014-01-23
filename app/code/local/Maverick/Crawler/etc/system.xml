@@ -58,7 +58,7 @@
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                             <tooltip>If crawlers take more than this value, the process stops</tooltip>
-                            <comment>Default is 7200 (2h)</comment>
+                            <comment>Leave blank for no maximum time, Warning !! if cron is enabled it may block other cron tasks</comment>
                         </max_time>
                         <clicks translate="label" module="maverick_crawler">
                             <label>Number of requests</label>
