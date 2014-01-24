@@ -102,11 +102,11 @@ class Maverick_Crawler_Helper_Crawler extends Mage_Core_Helper_Abstract
 
         // check if url is an external one (twitter, facebook, trustpilot, ...)
         $urlParsed =  parse_url($url);
-        if ($_SERVER['HTTP_HOST'] && (!isset($urlParsed['host']) || $urlParsed['host'] != $_SERVER['HTTP_HOST'])) {
+        if (isset($_SERVER['HTTP_HOST']) && (!isset($urlParsed['host']) || $urlParsed['host'] != $_SERVER['HTTP_HOST'])) {
             return false;
         }
 
-        if (!$_SERVER['HTTP_HOST'] && (!isset($urlParsed['host']) || (strpos(Mage::getBaseUrl('web'), $urlParsed['host']) === false))) {
+        if (!isset($_SERVER['HTTP_HOST']) && (!isset($urlParsed['host']) || (strpos(Mage::getBaseUrl('web'), $urlParsed['host']) === false))) {
             return false;
         }
 

@@ -59,7 +59,7 @@ class Maverick_Crawler_Model_Crawler_Type_Cms extends Maverick_Crawler_Model_Cra
                 continue;
             }
 
-            if ($_SERVER['HTTP_HOST']) {
+            if (isset($_SERVER['HTTP_HOST'])) {
                 // to run crawler from admin
                 $urls[] = Mage::getModel('core/url')->getUrl($page->getIdentifier());
             } else {

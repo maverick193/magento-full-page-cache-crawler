@@ -60,7 +60,7 @@ class Maverick_Crawler_Model_Crawler_Type_Category extends Maverick_Crawler_Mode
                 continue;
             }
 
-            if ($_SERVER['HTTP_HOST']) {
+            if (isset($_SERVER['HTTP_HOST'])) {
                 // to run crawler from admin
                 $urls[] = $category->getUrl();
             } else {
