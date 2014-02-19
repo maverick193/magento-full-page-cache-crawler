@@ -28,6 +28,11 @@
 
 class Maverick_Crawler_Block_Adminhtml_Crawler_Edit_Tab_Settings extends Mage_Adminhtml_Block_Widget_Form
 {
+    /**
+     * Preparing global layout
+     *
+     * @return Mage_Core_Block_Abstract
+     */
     protected function _prepareLayout()
     {
         $this->setChild('continue_button',
@@ -41,10 +46,17 @@ class Maverick_Crawler_Block_Adminhtml_Crawler_Edit_Tab_Settings extends Mage_Ad
         return parent::_prepareLayout();
     }
 
+    /**
+     * Prepare form before rendering HTML
+     *
+     * @return Mage_Adminhtml_Block_Widget_Form|void
+     */
     protected function _prepareForm()
     {
         $form = new Varien_Data_Form();
-        $fieldset = $form->addFieldset('settings', array('legend'=>Mage::helper('maverick_crawler')->__('Create Crawler Settings')));
+        $fieldset = $form->addFieldset('settings',
+            array('legend'=>Mage::helper('maverick_crawler')->__('Create Crawler Settings'))
+        );
 
         $fieldset->addField('type', 'select', array(
             'label'     => Mage::helper('maverick_crawler')->__('Crawler Type'),

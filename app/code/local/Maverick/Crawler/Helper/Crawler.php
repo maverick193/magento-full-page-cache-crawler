@@ -30,8 +30,8 @@ require_once(dirname(__FILE__) . '/../../../../../../../../autoload.php');
 class Maverick_Crawler_Helper_Crawler extends Mage_Core_Helper_Abstract
 {
     protected $_client;
-    protected $_already_visited;
-    protected $_frontend_routers;
+    protected $_alreadyVisited;
+    protected $_frontendRouters;
 
     /**
      * Init client
@@ -39,9 +39,16 @@ class Maverick_Crawler_Helper_Crawler extends Mage_Core_Helper_Abstract
     public function __construct()
     {
         $this->_client = new Goutte\Client;
-        $this->_frontend_routers = $this->_gatherFrontNames();
+        $this->_frontendRouters = $this->_gatherFrontNames();
     }
 
+    /**
+     * Visit url
+     *
+     * @param $url
+     * @param int $repeat
+     * @return bool|string|\Symfony\Component\DomCrawler\Crawler
+     */
     public function visit($url, $repeat = 1)
     {
         if (empty($url)) {
@@ -57,7 +64,7 @@ class Maverick_Crawler_Helper_Crawler extends Mage_Core_Helper_Abstract
 
         //@todo test visited Urls
         $urlHash = md5($url);
-        if (isset($this->_already_visited[$urlHash])) {
+        if (isset($this->_alreadyVisited[$urlHash])) {
             $message = $this->__('--> ### Url Already Visited %s', $url);
             Mage::helper('maverick_crawler')->log($message);
             return $message;
@@ -67,16 +74,22 @@ class Maverick_Crawler_Helper_Crawler extends Mage_Core_Helper_Abstract
             $crawler = $this->_client->request('GET', $url);
         }
 
-        $this->_already_visited[$urlHash] = true;
+        $this->_alreadyVisited[$urlHash] = true;
         return $crawler;
     }
 
+    /**
+     * Retrieve page links
+     *
+     * @param $crawler
+     * @return array
+     */
     public function getPageLinks($crawler)
     {
         $data       = array();
         $links      = $crawler->filter('a');
 
-        foreach ($links as $index => $link) {
+        foreach ($links as $link) {
             $href = $link->getAttribute('href');
             if (!in_array($href, $data) && $this->_validateHref($href)) {
                 $data[] = $href;
@@ -86,6 +99,12 @@ class Maverick_Crawler_Helper_Crawler extends Mage_Core_Helper_Abstract
         return $data;
     }
 
+    /**
+     * Validate url
+     *
+     * @param $url
+     * @return bool
+     */
     protected function _validateHref($url)
     {
         // check if is a valid url
@@ -96,23 +115,30 @@ class Maverick_Crawler_Helper_Crawler extends Mage_Core_Helper_Abstract
         }
 
         // check if url contains a module frontName
-        if (0 < count(array_intersect(array_map('strtolower', explode('/', $url)), $this->_frontend_routers))) {
+        if (0 < count(array_intersect(array_map('strtolower', explode('/', $url)), $this->_frontendRouters))) {
             return false;
         }
 
         // check if url is an external one (twitter, facebook, trustpilot, ...)
-        $urlParsed =  parse_url($url);
-        if (isset($_SERVER['HTTP_HOST']) && (!isset($urlParsed['host']) || $urlParsed['host'] != $_SERVER['HTTP_HOST'])) {
+        $urlParsed  = parse_url($url);
+        $httpHost   = Mage::helper('core/http')->getHttpHost();
+
+        if ($httpHost && (!isset($urlParsed['host']) || $urlParsed['host'] != $httpHost)) {
             return false;
         }
 
-        if (!isset($_SERVER['HTTP_HOST']) && (!isset($urlParsed['host']) || (strpos(Mage::getBaseUrl('web'), $urlParsed['host']) === false))) {
+        if (!$httpHost && (!isset($urlParsed['host'])
+            || (strpos(Mage::getBaseUrl('web'), $urlParsed['host']) === false))) {
             return false;
         }
 
         return true;
     }
 
+    /**
+     * Retrieve available modules front names
+     * @return array
+     */
     protected function _gatherFrontNames()
     {
         $routers    = Mage::app()->getConfig()->getNode('frontend/routers');
@@ -126,5 +152,17 @@ class Maverick_Crawler_Helper_Crawler extends Mage_Core_Helper_Abstract
         }
 
         return $frontNames;
+    }
+
+    /**
+     * Public function to validate url
+     * -- Used in crawler console shell --
+     *
+     * @param $url
+     * @return bool
+     */
+    public function validateUrl($url)
+    {
+        return $this->_validateHref($url);
     }
 }

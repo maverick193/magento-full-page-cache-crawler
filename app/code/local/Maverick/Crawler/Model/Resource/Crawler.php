@@ -33,7 +33,7 @@ class Maverick_Crawler_Model_Resource_Crawler extends Mage_Core_Model_Resource_D
      *
      * @var string
      */
-    protected $_crawlerCategoryTable;
+    protected $_crawlerCategTable;
 
     /**
      * Crawler to cms page linkage table
@@ -48,8 +48,8 @@ class Maverick_Crawler_Model_Resource_Crawler extends Mage_Core_Model_Resource_D
     protected function _construct()
     {
         $this->_init('maverick_crawler/crawler', 'entity_id');
-        $this->_crawlerCategoryTable    = $this->getTable('maverick_crawler/type_category');
-        $this->_crawlerCmsTable         = $this->getTable('maverick_crawler/type_cms');
+        $this->_crawlerCategTable    = $this->getTable('maverick_crawler/type_category');
+        $this->_crawlerCmsTable      = $this->getTable('maverick_crawler/type_cms');
     }
 
     /**
@@ -80,7 +80,7 @@ class Maverick_Crawler_Model_Resource_Crawler extends Mage_Core_Model_Resource_D
         $adapter = $this->_getReadAdapter();
 
         $select = $adapter->select()
-            ->from($this->_crawlerCategoryTable, 'category_id')
+            ->from($this->_crawlerCategTable, 'category_id')
             ->where('crawler_id = ?', (int)$crawler->getId());
 
         return $adapter->fetchCol($select);
@@ -132,7 +132,7 @@ class Maverick_Crawler_Model_Resource_Crawler extends Mage_Core_Model_Resource_D
                 );
             }
             if ($data) {
-                $write->insertMultiple($this->_crawlerCategoryTable, $data);
+                $write->insertMultiple($this->_crawlerCategTable, $data);
             }
         }
 
@@ -143,7 +143,7 @@ class Maverick_Crawler_Model_Resource_Crawler extends Mage_Core_Model_Resource_D
                     'category_id = ?' => (int)$categoryId,
                 );
 
-                $write->delete($this->_crawlerCategoryTable, $where);
+                $write->delete($this->_crawlerCategTable, $where);
             }
         }
 
@@ -205,5 +205,25 @@ class Maverick_Crawler_Model_Resource_Crawler extends Mage_Core_Model_Resource_D
         }
 
         return $this;
+    }
+
+    /**
+     * Check if crawler exists
+     *
+     * @param $crawlerId
+     * @return array|bool
+     */
+    public function crawlerExists($crawlerId)
+    {
+        if ($crawlerId > 0) {
+            $adapter    = $this->_getReadAdapter();
+            $bind       = array('entity_id' => $crawlerId);
+            $select     = $adapter->select()->from($this->getMainTable())
+                ->where('entity_id = :entity_id');
+
+            return $adapter->fetchOne($select, $bind);
+        }
+
+        return false;
     }
 }

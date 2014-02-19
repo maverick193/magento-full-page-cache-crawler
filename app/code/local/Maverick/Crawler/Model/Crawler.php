@@ -40,7 +40,7 @@ class Maverick_Crawler_Model_Crawler extends Mage_Core_Model_Abstract
     /**
      * Initialize crawler model
      */
-    function _construct()
+    protected function _construct()
     {
         $this->_init('maverick_crawler/crawler');
     }
@@ -115,6 +115,10 @@ class Maverick_Crawler_Model_Crawler extends Mage_Core_Model_Abstract
         return (array) $this->_getData('page_ids');
     }
 
+    /**
+     * Check before run crawler
+     * @return Mage_Core_Model_Abstract|object
+     */
     protected function _beforeRun()
     {
         // Check crawler type
@@ -168,5 +172,24 @@ class Maverick_Crawler_Model_Crawler extends Mage_Core_Model_Abstract
         $obj->setCrawler($this);
 
         return $obj;
+    }
+
+    /**
+     * Reset crawler data
+     *
+     * @return Maverick_Crawler_Model_Crawler
+     */
+    public function reset()
+    {
+        foreach ($this->_data as $data){
+            if (is_object($data) && method_exists($data, 'reset')){
+                $data->reset();
+            }
+        }
+
+        $this->setData(array());
+        $this->setOrigData();
+
+        return $this;
     }
 }

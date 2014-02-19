@@ -32,7 +32,8 @@ class Maverick_Crawler_Adminhtml_CrawlerController extends Mage_Adminhtml_Contro
      * Check ACL permissions
      * @todo check ACL permissions
      */
-    protected function _isAllowed() {
+    protected function _isAllowed()
+    {
         return Mage::getSingleton('admin/session')->isAllowed('maverick/crawler');
     }
 
@@ -63,13 +64,13 @@ class Maverick_Crawler_Adminhtml_CrawlerController extends Mage_Adminhtml_Contro
      */
     protected function _initCrawler()
     {
-        $id         = (int) $this->getRequest()->getParam('id');
+        $crawlerId         = (int) $this->getRequest()->getParam('id');
         $crawler    = Mage::getModel('maverick_crawler/crawler');
 
-        if ($id) {
-            $crawler->load($id);
+        if ($crawlerId) {
+            $crawler->load($crawlerId);
             if (!$crawler->getId()) {
-                Mage::throwException($this->__('No crawler with ID "%s" found.', $id));
+                Mage::throwException($this->__('No crawler with ID "%s" found.', $crawlerId));
             }
         }
 
@@ -98,10 +99,10 @@ class Maverick_Crawler_Adminhtml_CrawlerController extends Mage_Adminhtml_Contro
     public function editAction()
     {
         $this->_initCrawler();
-        $id         = (int) $this->getRequest()->getParam('id');
+        $crawlerId         = (int) $this->getRequest()->getParam('id');
         $crawler    = Mage::registry('current_crawler');
 
-        if ($id && !$crawler->getId()) {
+        if ($crawlerId && !$crawler->getId()) {
             $this->_getSession()->addError(Mage::helper('maverick_crawler')->__('This crawler no longer exists.'));
             $this->_redirect('*/*/');
             return;
@@ -243,8 +244,8 @@ class Maverick_Crawler_Adminhtml_CrawlerController extends Mage_Adminhtml_Contro
      */
     public function deleteAction()
     {
-        if ($id = $this->getRequest()->getParam('id')) {
-            $crawler    = Mage::getModel('maverick_crawler/crawler')->load($id);
+        if ($crawlerId = $this->getRequest()->getParam('id')) {
+            $crawler    = Mage::getModel('maverick_crawler/crawler')->load($crawlerId);
             $name       = $crawler->getName();
 
             try {
@@ -254,7 +255,7 @@ class Maverick_Crawler_Adminhtml_CrawlerController extends Mage_Adminhtml_Contro
                 return;
             } catch (Exception $e) {
                 $this->_getSession()->addError($e->getMessage());
-                $this->_redirect('*/*/edit', array('id' => $id));
+                $this->_redirect('*/*/edit', array('id' => $crawlerId));
                 return;
             }
         }
@@ -291,7 +292,7 @@ class Maverick_Crawler_Adminhtml_CrawlerController extends Mage_Adminhtml_Contro
 
     public function runAction()
     {
-        if ($id = $this->getRequest()->getParam('id')) {
+        if ($crawlerId = $this->getRequest()->getParam('id')) {
             try {
                 $this->_initCrawler();
                 $crawler    = Mage::registry('current_crawler');
@@ -313,7 +314,7 @@ class Maverick_Crawler_Adminhtml_CrawlerController extends Mage_Adminhtml_Contro
                 $this->_getSession()->addError($e->getMessage());
             }
 
-            $this->_redirect('*/*/edit', array('id' => $id));
+            $this->_redirect('*/*/edit', array('id' => $crawlerId));
             return;
         }
 

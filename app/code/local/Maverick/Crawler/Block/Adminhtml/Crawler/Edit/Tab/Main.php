@@ -35,7 +35,9 @@ class Maverick_Crawler_Block_Adminhtml_Crawler_Edit_Tab_Main extends Mage_Adminh
 
         $crawler = Mage::registry('current_crawler');
 
-        $fieldset = $form->addFieldset('main', array('legend'=>Mage::helper('maverick_crawler')->__('General Information')));
+        $fieldset = $form->addFieldset('main',
+            array('legend' => Mage::helper('maverick_crawler')->__('General Information'))
+        );
 
         $fieldset->addField('name', 'text', array(
             'label'     => Mage::helper('maverick_crawler')->__('Crawler Name'),
@@ -81,7 +83,9 @@ class Maverick_Crawler_Block_Adminhtml_Crawler_Edit_Tab_Main extends Mage_Adminh
             'label'     => Mage::helper('maverick_crawler')->__('Enable Scan'),
             'title'     => Mage::helper('maverick_crawler')->__('Enable Scan'),
             'name'      => 'scan',
-            'note'      => Mage::helper('maverick_crawler')->__('This will scan every url visited and get all of links in order to crawl them'),
+            'note'      => Mage::helper('maverick_crawler')->__(
+                                    'This will scan every url visited and get all of links in order to crawl them'
+                           ),
             'required'  => true,
             'options'   => Mage::getSingleton('adminhtml/system_config_source_yesno')->toArray(),
         ));

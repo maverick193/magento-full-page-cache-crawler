@@ -28,7 +28,7 @@
 
 class Maverick_Crawler_Helper_Data extends Mage_Core_Helper_Abstract
 {
-    protected $_log_file = 'maverick_crawler.log';
+    protected $_logFile = 'maverick_crawler.log';
 
     /**
      * Log Facility
@@ -38,6 +38,6 @@ class Maverick_Crawler_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function log($message, $level = Zend_Log::DEBUG)
     {
-        Mage::log($message, $level, $this->_log_file, true);
+        Mage::log($message, $level, $this->_logFile, true);
     }
 }

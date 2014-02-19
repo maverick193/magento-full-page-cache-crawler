@@ -101,10 +101,18 @@ $table = $installer->getConnection()
     ), 'Category ID')
     ->addIndex($installer->getIdxName('maverick_crawler/type_category', array('category_id')),
         array('category_id'))
-    ->addForeignKey($installer->getFkName('maverick_crawler/type_category', 'crawler_id', 'maverick_crawler/crawler', 'entity_id'),
+    ->addForeignKey($installer->getFkName('maverick_crawler/type_category',
+            'crawler_id',
+            'maverick_crawler/crawler',
+            'entity_id'
+        ),
         'crawler_id', $installer->getTable('maverick_crawler/crawler'), 'entity_id',
         Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE)
-    ->addForeignKey($installer->getFkName('maverick_crawler/type_category', 'category_id', 'catalog/category', 'entity_id'),
+    ->addForeignKey($installer->getFkName('maverick_crawler/type_category',
+            'category_id',
+            'catalog/category',
+            'entity_id'
+        ),
         'category_id', $installer->getTable('catalog/category'), 'entity_id',
         Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE)
     ->setComment('Crawler To Category Linkage Table');

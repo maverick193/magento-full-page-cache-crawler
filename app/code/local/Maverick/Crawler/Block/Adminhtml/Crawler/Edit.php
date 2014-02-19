@@ -62,7 +62,9 @@ class Maverick_Crawler_Block_Adminhtml_Crawler_Edit extends Mage_Adminhtml_Block
             if ($this->getCrawler()->getId() &&
                ($this->getCrawler()->getStatus() == Maverick_Crawler_Model_Crawler::STATUS_ENABLED)) {
 
-                $message = Mage::helper('maverick_crawler')->__('Crawling may take several time if you choose lot of pages, Are you sure that you want run it?');
+                /*$message = Mage::helper('maverick_crawler')->__(
+                    'Crawling may take several time if you choose lot of pages, Are you sure that you want run it?'
+                );*/
                 $this->_addButton('run', array(
                     'label'     => Mage::helper('maverick_crawler')->__('Run Now'),
                     //'onclick'   => 'confirmSetLocation(\''.$message.'\', \'' . $this->getRunUrl() .'\')',
@@ -97,13 +99,19 @@ class Maverick_Crawler_Block_Adminhtml_Crawler_Edit extends Mage_Adminhtml_Block
     public function getHeaderText()
     {
         if ($this->getCrawler()->getId()) {
-            return Mage::helper('maverick_crawler')->__("Edit Crawler '%s'", $this->escapeHtml($this->getCrawler()->getName()));
-        }
-        else {
+            return Mage::helper('maverick_crawler')->__("Edit Crawler '%s'",
+                $this->escapeHtml($this->getCrawler()->getName())
+            );
+        } else {
             return Mage::helper('maverick_crawler')->__('New Crawler');
         }
     }
 
+    /**
+     * Return run url
+     *
+     * @return string
+     */
     public function getRunUrl()
     {
         return $this->getUrl('*/*/run', array('id' => $this->getCrawler()->getId()));

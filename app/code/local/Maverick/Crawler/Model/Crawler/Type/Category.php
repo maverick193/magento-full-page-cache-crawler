@@ -60,11 +60,11 @@ class Maverick_Crawler_Model_Crawler_Type_Category extends Maverick_Crawler_Mode
                 continue;
             }
 
-            if (isset($_SERVER['HTTP_HOST'])) {
-                // to run crawler from admin
+            if (Mage::helper('core/http')->getHttpHost()) {
+                // Crawler run from admin
                 $urls[] = $category->getUrl();
             } else {
-                // to run crawler from shell
+                // Crawler run from shell
                 $host = Mage::getStoreConfig(Mage_Core_Model_Store::XML_PATH_USE_REWRITES) ?
                         Mage::getBaseUrl('web') : Mage::getBaseUrl('web') . 'index.php/';
 

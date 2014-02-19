@@ -117,8 +117,7 @@ class Maverick_Crawler_Block_Adminhtml_Crawler_Edit_Tab_Entity_Type_Category
             if ($storeId) {
                 $store = Mage::app()->getStore($storeId);
                 $rootId = $store->getRootCategoryId();
-            }
-            else {
+            } else {
                 $rootId = Mage_Catalog_Model_Category::TREE_ROOT_ID;
             }
 
@@ -249,10 +248,9 @@ class Maverick_Crawler_Block_Adminhtml_Crawler_Edit_Tab_Entity_Type_Category
     /**
      * Returns URL for loading tree
      *
-     * @param null $expanded
      * @return string
      */
-    public function getLoadTreeUrl($expanded = null)
+    public function getLoadTreeUrl()
     {
         return $this->getUrl('*/*/categoriesJson', array('_current' => true));
     }

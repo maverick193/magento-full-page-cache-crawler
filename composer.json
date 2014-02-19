@@ -5,7 +5,8 @@
     "homepage":"https://github.com/maverick193/magento-cache-crawler",
     "description":"Magento Cache and Full Page Cache Warmer Extension",
     "require":{
-        "fabpot/goutte": "1.0.*@dev",
+        "fabpot/goutte": "v1.0.5",
+        "symfony/console": "*",
         "magento-hackathon/magento-composer-installer": "*"
     },
     "authors":[

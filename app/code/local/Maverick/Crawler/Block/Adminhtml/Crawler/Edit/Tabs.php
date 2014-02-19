@@ -40,13 +40,19 @@ class Maverick_Crawler_Block_Adminhtml_Crawler_Edit_Tabs extends Mage_Adminhtml_
         $this->setTitle(Mage::helper('maverick_crawler')->__('Crawler Information'));
     }
 
+    /**
+     * Add tabs
+     *
+     * @return Mage_Core_Block_Abstract
+     */
     protected function _beforeToHtml()
     {
         if ($this->getCrawler()->getId() || (!$this->getCrawler()->getId() && $this->getRequest()->getParam('type'))) {
             $this->addTab('main', array(
                 'label'     => Mage::helper('maverick_crawler')->__('General Information'),
                 'title'     => Mage::helper('maverick_crawler')->__('General Information'),
-                'content'   => $this->getLayout()->createBlock('maverick_crawler/adminhtml_crawler_edit_tab_main')->toHtml(),
+                'content'   => $this->getLayout()->createBlock('maverick_crawler/adminhtml_crawler_edit_tab_main')
+                                                 ->toHtml(),
                 'active'    => true
             ));
 
@@ -62,7 +68,9 @@ class Maverick_Crawler_Block_Adminhtml_Crawler_Edit_Tabs extends Mage_Adminhtml_
                     $this->addTab($type, array(
                         'label'     => Mage::helper('maverick_crawler')->__($types[$type]),
                         'title'     => Mage::helper('maverick_crawler')->__($types[$type]),
-                        'content'   => $this->getLayout()->createBlock('maverick_crawler/adminhtml_crawler_edit_tab_' . $type)->toHtml()
+                        'content'   => $this->getLayout()
+                                            ->createBlock('maverick_crawler/adminhtml_crawler_edit_tab_' . $type)
+                                            ->toHtml()
                     ));
                 }
             }
@@ -70,7 +78,9 @@ class Maverick_Crawler_Block_Adminhtml_Crawler_Edit_Tabs extends Mage_Adminhtml_
             $this->addTab('set', array(
                 'label'     => Mage::helper('maverick_crawler')->__('Settings'),
                 'title'     => Mage::helper('maverick_crawler')->__('Settings'),
-                'content'   => $this->getLayout()->createBlock('maverick_crawler/adminhtml_crawler_edit_tab_settings')->toHtml(),
+                'content'   => $this->getLayout()
+                                    ->createBlock('maverick_crawler/adminhtml_crawler_edit_tab_settings')
+                                    ->toHtml(),
                 'active'    => true
             ));
         }
