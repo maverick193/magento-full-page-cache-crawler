@@ -248,9 +248,10 @@ class Maverick_Crawler_Block_Adminhtml_Crawler_Edit_Tab_Entity_Type_Category
     /**
      * Returns URL for loading tree
      *
+     * @param null $expanded
      * @return string
      */
-    public function getLoadTreeUrl()
+    public function getLoadTreeUrl($expanded = NULL)
     {
         return $this->getUrl('*/*/categoriesJson', array('_current' => true));
     }

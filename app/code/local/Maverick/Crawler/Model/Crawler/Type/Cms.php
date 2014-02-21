@@ -59,13 +59,14 @@ class Maverick_Crawler_Model_Crawler_Type_Cms extends Maverick_Crawler_Model_Cra
                 continue;
             }
 
-            if (isset($_SERVER['HTTP_HOST'])) {
+            if (Mage::helper('core/http')->getHttpHost()) {
                 // to run crawler from admin
                 $urls[] = Mage::getModel('core/url')->getUrl($page->getIdentifier());
             } else {
                 // to run crawler from shell
                 $host = Mage::getStoreConfig(Mage_Core_Model_Store::XML_PATH_USE_REWRITES) ?
-                        Mage::getBaseUrl('web') : Mage::getBaseUrl('web') . 'index.php/';
+                        Mage::getBaseUrl('web') :
+                        Mage::getBaseUrl('web') . 'index.php/';
 
                 $identifier = $page->getIdentifier();
                 if (substr($identifier, 0, 1) == '/') {
