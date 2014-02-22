@@ -49,10 +49,21 @@ If you are not familiar with composer, please read the composer documentations o
     }
 }
 ```
-Update the "magento-root-dir" node (specify your Magento root folder "web/", "./", ...)
-The "magento-composer-installer" will install the module (via symlinks) in Magento folder structure, more information on [magento-composer-installer](https://github.com/magento-hackathon/magento-composer-installer)
+- Update the "magento-root-dir" node (specify your Magento root folder "web/", "./", ...)
+- The "magento-composer-installer" will install the module (via symlinks) in Magento folder structure, more information on [magento-composer-installer](https://github.com/magento-hackathon/magento-composer-installer)
 
 ### 3. Install Maverick FPC Crawler via composer :
 ```
 php composer.phar install
 ```
+Support and Contribution
+========================
+If you have any issues with this extension, please open an issue on Github.
+
+Any contributions are highly appreciated. If you want to contribute, please open [pull request on GitHub](https://help.github.com/articles/using-pull-requests).
+
+Copyright and License
+=====================
+License   : [OSL - Open Software Licence 3.0](http://opensource.org/licenses/osl-3.0.php).
+
+Copyright : (c) 2014 Mohammed NAHHAS
