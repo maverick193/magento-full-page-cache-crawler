@@ -1,9 +1,9 @@
 {
-    "name":"maverick/magento-cache-crawler",
+    "name":"maverick/magento-fpc-crawler",
     "type":"magento-module",
     "license":"OSL-3.0",
-    "homepage":"https://github.com/maverick193/magento-cache-crawler",
-    "description":"Magento Cache and Full Page Cache Warmer Extension",
+    "homepage":"https://github.com/maverick193/magento-full-page-cache-crawler",
+    "description":"Magento Full Page Cache Warmer Extension",
     "require":{
         "fabpot/goutte": "v1.0.5",
         "symfony/console": "*",

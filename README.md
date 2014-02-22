@@ -38,13 +38,13 @@ If you are not familiar with composer, please read the composer documentations o
 {
     "name": "Your Project Name",
     "require": {
-        "maverick/magento-cache-crawler": "*",
+        "maverick/magento-fpc-crawler": "*",
         "magento-hackathon/magento-composer-installer": "*"
     },
     "repositories": [
         {
             "type": "vcs",
-            "url": "git://github.com/maverick193/magento-cache-crawler.git"
+            "url": "git://github.com/maverick193/magento-full-page-cache-crawler.git"
         },
         {
             "type": "vcs",
