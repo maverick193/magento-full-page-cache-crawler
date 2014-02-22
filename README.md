@@ -63,6 +63,11 @@ If you are not familiar with composer, please read the composer documentations o
 ```
 php composer.phar install
 ```
+Usage
+=====
+
+See how it works on [Crawler Wiki Pages](https://github.com/maverick193/magento-full-page-cache-crawler/wiki)
+
 Support and Contribution
 ========================
 If you have any issues with this extension, please open an issue on Github.
