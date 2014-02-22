@@ -15,6 +15,13 @@ This extension allows you to control all the pages you want to warm, you can cho
 
 The extension have other functionnalities described bellow.
 
+Requirements
+============
+
+- Install PHP Composer, see bellow
+- Allow the use of symlinks in Magento Backend (System->Configuration->Developer->Template Settings ->"Allow Symlinks")
+  There no security risk by allowing symlinks in Magento
+
 Installation
 ============
 ### 1. Install PHP-Composer :
