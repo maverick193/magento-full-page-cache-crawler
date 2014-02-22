@@ -121,7 +121,29 @@ class Crawl extends Command
                         'Please, Enter Urls you want warm up <comment>(urls must be separated by spaces)</comment>'
                         . "\n"
                     ),
-                    function($urls, $output){ return $this->_validateUrls(explode(' ', $urls), $output); },
+                    function($urls) {
+                        // Compatibility with PHP 5.3 which does not support the use of $this inside a Closure
+                        // return $this->_validateUrls(explode(' ', $urls));
+                        $urls           = explode(' ', $urls);
+                        $crawlerHelper  = Mage::helper('maverick_crawler/crawler');
+
+                        if (empty($urls)) {
+                            throw new \RunTimeException($crawlerHelper->__('Please enter a valid url(s)'));
+                        }
+
+                        foreach ($urls as $url) {
+                            $url = trim($url);
+                            if (empty($url)) {
+                                unset($urls[array_search($url, $urls)]);
+                                continue;
+                            }
+                            if (!$crawlerHelper->validateUrl($url)) {
+                                throw new \RunTimeException($crawlerHelper->__('%s Is not a valid url', $url));
+                            }
+                        }
+
+                        return $urls;
+                    },
                     false,
                     null
                 );
@@ -148,7 +170,24 @@ class Crawl extends Command
                         'If your base urls are correct, enter crawler entities IDs <comment>(IDs must be separated by spaces)</comment>'
                         . "\n"
                     ),
-                    function($crawlerIds, $output){ return $this->_validateIDs(explode(' ', $crawlerIds), $output); },
+                    function($crawlerIds) {
+                        // Compatibility with PHP 5.3 which does not support the use of $this inside a Closure
+                        // return $this->_validateIDs(explode(' ', $crawlerIds));
+                        $crawlerIds     = explode(' ', $crawlerIds);
+                        $crawlerHelper  = Mage::helper('maverick_crawler/crawler');
+                        if (empty($crawlerIds)) {
+                            throw new \RunTimeException($crawlerHelper->__('Please enter an existing Crawler IDs'));
+                        }
+                        $crawlerResource = Mage::getResourceModel('maverick_crawler/crawler');
+
+                        foreach ($crawlerIds as $crawlerId) {
+                            if (!$crawlerResource->crawlerExists(trim($crawlerId))) {
+                                throw new \RunTimeException($crawlerHelper->__('ID %s does not exist', $crawlerId));
+                            }
+                        }
+
+                        return $crawlerIds;
+                    },
                     false,
                     null
                 );
@@ -274,6 +313,10 @@ EOT
     {
         if (isset($_SERVER['REQUEST_METHOD'])) {
             die('This script cannot be run from Browser. This is the shell script.');
+        }
+
+        if (version_compare(phpversion(), '5.4.0', '<')===true) {
+            die($this->_getHelper()->__('Crawler Shell supports PHP 5.4.0 or newer.') . "\n");
         }
     }
 
