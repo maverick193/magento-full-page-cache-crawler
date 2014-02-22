@@ -8,7 +8,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-//use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Helper\DialogHelper;
 use Mage_Core_Model_Factory as MageFactory;
 
@@ -314,10 +313,6 @@ EOT
         if (isset($_SERVER['REQUEST_METHOD'])) {
             die('This script cannot be run from Browser. This is the shell script.');
         }
-
-        if (version_compare(phpversion(), '5.4.0', '<')===true) {
-            die($this->_getHelper()->__('Crawler Shell supports PHP 5.4.0 or newer.') . "\n");
-        }
     }
 
     /**
@@ -431,6 +426,12 @@ EOT
         $output->writeln($crawlerHelper->__('<fg=cyan>Done</fg=cyan>' . "\n"));
     }
 
+    /**
+     * Scan and crawl urls
+     *
+     * @param $result
+     * @param $output
+     */
     protected function _scanCrawledUrls($result, $output)
     {
         $progress   = $this->_initProgressBar();
@@ -454,6 +455,11 @@ EOT
         }
     }
 
+    /**
+     * Init progress bar
+     *
+     * @return null|\Symfony\Component\Console\Helper\HelperInterface
+     */
     protected function _initProgressBar()
     {
         if (is_null($this->_progress)) {
