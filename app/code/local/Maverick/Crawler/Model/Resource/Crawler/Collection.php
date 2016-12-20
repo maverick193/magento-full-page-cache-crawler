@@ -44,7 +44,7 @@ class Maverick_Crawler_Model_Resource_Crawler_Collection extends Mage_Core_Model
      */
     public function filterByStatus($status)
     {
-        $this->addFieldToFilter($status, array('eq' => $status));
+        $this->addFieldToFilter('status', array('eq' => $status));
 
         return $this;
     }
